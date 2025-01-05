@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
-import '../../models/joke.dart'; // Assuming Joke model is defined
+import '../../models/joke.dart';
 
 class JokeCard extends StatefulWidget {
   final Joke joke;
+  final bool isFavorite;
+  final VoidCallback onFavoriteToggle;
 
-  const JokeCard({super.key, required this.joke});
+  const JokeCard({
+    super.key,
+    required this.joke,
+    required this.isFavorite,
+    required this.onFavoriteToggle,
+  });
 
   @override
   _JokeCardState createState() => _JokeCardState();
 }
 
 class _JokeCardState extends State<JokeCard> {
-  bool _isPunchlineVisible = false; // Flag to toggle punchline visibility
+  bool _isPunchlineVisible = false;
 
   void _togglePunchline() {
     setState(() {
-      _isPunchlineVisible = !_isPunchlineVisible; // Toggle the visibility
+      _isPunchlineVisible = !_isPunchlineVisible;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _togglePunchline, // When the card is tapped, toggle the punchline visibility
+      onTap: _togglePunchline,
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(
@@ -34,12 +41,26 @@ class _JokeCardState extends State<JokeCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.joke.setup,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.joke.setup,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: widget.isFavorite ? Colors.red : Colors.grey,
+                    ),
+                    onPressed: widget.onFavoriteToggle, // Toggle favorite state
+                  ),
+                ],
               ),
               SizedBox(height: 8),
               if (_isPunchlineVisible)

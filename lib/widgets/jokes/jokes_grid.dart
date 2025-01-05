@@ -13,7 +13,7 @@ class JokesGrid extends StatelessWidget {
     return ListView.builder(
       itemCount: jokes.length,
       itemBuilder: (context, index) {
-        return JokeCard(joke: jokes[index]);
+        return JokeCard(joke: jokes[index], isFavorite: false, onFavoriteToggle: () {  },);
       },
     );
   }

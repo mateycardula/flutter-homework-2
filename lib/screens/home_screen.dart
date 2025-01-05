@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jokes_homework/screens/random_joke_screen.dart';
+import 'package:jokes_homework/screens/favorites_screen.dart'; // Import FavoritesScreen
 
 import '../service/ApiService.dart';
 import '../widgets/types/types_grid.dart';
@@ -53,7 +54,18 @@ class _HomeState extends State<Home> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_today_outlined, color: Colors.yellow, size: 40,),  // Икона за случајна шега
+            icon: const Icon(Icons.favorite, color: Colors.red, size: 40), // Favorites icon
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FavoritesScreen(favoriteJokes: []), // Replace with your favorites list
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.calendar_today_outlined, color: Colors.yellow, size: 40),  // Random joke icon
             onPressed: () {
               Navigator.push(
                 context,
