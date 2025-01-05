@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../models/joke.dart';
+import '../../service/favorites_service.dart';
 
 class JokeCard extends StatefulWidget {
   final Joke joke;
-  final bool isFavorite;
-  final VoidCallback onFavoriteToggle;
 
   const JokeCard({
     super.key,
-    required this.joke,
-    required this.isFavorite,
-    required this.onFavoriteToggle,
+    required this.joke, required bool isFavorite, required Null Function() onFavoriteToggle,
   });
 
   @override
@@ -18,8 +15,37 @@ class JokeCard extends StatefulWidget {
 }
 
 class _JokeCardState extends State<JokeCard> {
+  bool _isFavorite = false;
   bool _isPunchlineVisible = false;
+  final FavoritesService _favoritesService = FavoritesService();
 
+  @override
+  void initState() {
+    super.initState();
+    _checkIfFavorite();
+  }
+
+  // Check if the current joke is favorited by the user
+  Future<void> _checkIfFavorite() async {
+    final isFavorite = await _favoritesService.isFavorite(widget.joke.id as String);
+    setState(() {
+      _isFavorite = isFavorite;
+    });
+  }
+
+  // Toggle the favorite status
+  void _toggleFavorite() async {
+    try {
+      await _favoritesService.toggleFavorite(widget.joke.id, _isFavorite);
+      setState(() {
+        _isFavorite = !_isFavorite;
+      });
+    } catch (e) {
+      print('Error toggling favorite: ${e.toString()}');
+    }
+  }
+
+  // Toggle the punchline visibility
   void _togglePunchline() {
     setState(() {
       _isPunchlineVisible = !_isPunchlineVisible;
@@ -55,10 +81,10 @@ class _JokeCardState extends State<JokeCard> {
                   ),
                   IconButton(
                     icon: Icon(
-                      widget.isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: widget.isFavorite ? Colors.red : Colors.grey,
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: _isFavorite ? Colors.red : Colors.grey,
                     ),
-                    onPressed: widget.onFavoriteToggle, // Toggle favorite state
+                    onPressed: _toggleFavorite, // Toggle favorite status
                   ),
                 ],
               ),

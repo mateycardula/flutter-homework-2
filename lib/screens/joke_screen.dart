@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/joke.dart';
 import '../service/ApiService.dart';
 import '../widgets/jokes/jokes_grid.dart';
+import '../service/favorites_service.dart';
 
 class JokesScreen extends StatefulWidget {
   final String jokeType;
@@ -15,11 +16,13 @@ class JokesScreen extends StatefulWidget {
 class _JokesScreenState extends State<JokesScreen> {
   List<Joke> jokes = [];
   bool isLoading = true;
+  List<String> favoriteJokes = []; // Track the favorite jokes list
 
   @override
   void initState() {
     super.initState();
     fetchJokes();
+    _loadFavorites(); // Load the favorite jokes when the screen is initialized
   }
 
   // Fetch jokes based on selected type
@@ -40,6 +43,28 @@ class _JokesScreenState extends State<JokesScreen> {
     }
   }
 
+  // Fetch the favorite jokes from Firebase
+  Future<void> _loadFavorites() async {
+    try {
+      List<String> favoriteIds = await FavoritesService().getFavoriteJokes();
+      setState(() {
+        favoriteJokes = favoriteIds; // Update the list of favorite jokes
+      });
+    } catch (e) {
+      print('Error loading favorites: $e');
+    }
+  }
+
+  // Toggle the favorite state for a joke
+  void _toggleFavorite(String jokeId, bool isFavorite) async {
+    try {
+      await FavoritesService().toggleFavorite(jokeId, isFavorite);
+      _loadFavorites();  // Refresh favorite jokes list
+    } catch (e) {
+      print('Error toggling favorite: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +77,11 @@ class _JokesScreenState extends State<JokesScreen> {
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
-          : JokesGrid(jokes: jokes),
+          : JokesGrid(
+        jokes: jokes,
+        favoriteJokes: favoriteJokes,
+        onFavoriteToggle: _toggleFavorite, onRemove: (String ) {  },
+      ),  // Pass favoriteJokes and onFavoriteToggle callback
     );
   }
 }

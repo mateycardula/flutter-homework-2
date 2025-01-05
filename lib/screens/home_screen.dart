@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FavoritesScreen(favoriteJokes: []), // Replace with your favorites list
+                    builder: (context) => const FavoritesScreen(), // Navigate to FavoritesScreen without passing favorites
                   ),
                 );
               } else {

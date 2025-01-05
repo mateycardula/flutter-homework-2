@@ -30,6 +30,7 @@ class ApiService {
     }
   }
 
+  // Fetch a random joke
   static Future<Joke> getRandomJoke() async {
     final response = await http.get(Uri.parse('$_baseUrl/random_joke'));
 
@@ -38,6 +39,18 @@ class ApiService {
       return Joke.fromJson(jokeJson);
     } else {
       throw Exception('Failed to load random joke');
+    }
+  }
+
+  // Fetch a joke by its ID
+  static Future<Joke> getJokeById(String id) async {
+    final response = await http.get(Uri.parse('$_baseUrl/jokes/$id'));
+
+    if (response.statusCode == 200) {
+      var jokeJson = jsonDecode(response.body);
+      return Joke.fromJson(jokeJson);
+    } else {
+      throw Exception('Failed to load joke with ID $id');
     }
   }
 }
