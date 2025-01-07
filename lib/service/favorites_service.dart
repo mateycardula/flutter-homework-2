@@ -6,11 +6,9 @@ class FavoritesService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Reference to the favorites collection
   CollectionReference get _favoritesCollection =>
       _firestore.collection('favorites');
 
-  // Add or remove a joke to/from favorites
   Future<void> toggleFavorite(String jokeId, bool isFavorite) async {
     try {
       final user = _auth.currentUser;
@@ -18,9 +16,7 @@ class FavoritesService {
         throw FirebaseAuthException(code: 'user-not-logged-in', message: 'User is not logged in');
       }
 
-      // Add or remove the joke from Firestore based on the `isFavorite` flag
       if (isFavorite) {
-        // If it's a favorite, remove it
         await _favoritesCollection
             .doc(user.uid)
             .collection('userFavorites')
@@ -43,7 +39,6 @@ class FavoritesService {
     }
   }
 
-  // Fetch all favorite jokes for the current user
   Future<List<String>> getFavoriteJokes() async {
     try {
       final user = _auth.currentUser;
@@ -63,7 +58,6 @@ class FavoritesService {
     }
   }
 
-  // Check if a specific joke is favorited by the current user
   Future<bool> isFavorite(String jokeId) async {
     try {
       final user = _auth.currentUser;
