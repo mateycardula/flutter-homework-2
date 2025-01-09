@@ -6,18 +6,17 @@ import '../screens/auth/login_page.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(); // Secure Storage instance
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
-  // Register a new user
   Future<String?> register(String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      await _secureStorage.write(key: 'email', value: email); // Store email securely
-      await _secureStorage.write(key: 'loggedIn', value: 'true'); // Store login status securely
-      // Navigate to login screen or home
+      await _secureStorage.write(key: 'email', value: email);
+      await _secureStorage.write(key: 'loggedIn', value: 'true');
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (BuildContext context) => const LoginPage()),
@@ -36,17 +35,15 @@ class AuthService {
     }
   }
 
-  // Log in an existing user
   Future<String?> login(String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      await _secureStorage.write(key: 'email', value: email); // Store email securely
-      await _secureStorage.write(key: 'loggedIn', value: 'true'); // Store login status securely
+      await _secureStorage.write(key: 'email', value: email);
+      await _secureStorage.write(key: 'loggedIn', value: 'true');
 
-      // Navigate to home screen
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.pushReplacement(
           context,
@@ -67,14 +64,12 @@ class AuthService {
     }
   }
 
-  // Log out the current user
   Future<void> logout(BuildContext context) async {
     try {
       await _auth.signOut();
-      await _secureStorage.write(key: 'loggedIn', value: 'false'); // Update login status securely
-      await _secureStorage.delete(key: 'email'); // Delete stored email
+      await _secureStorage.write(key: 'loggedIn', value: 'false');
+      await _secureStorage.delete(key: 'email');
 
-      // Navigate back to login screen
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.pushReplacement(
           context,
@@ -86,16 +81,14 @@ class AuthService {
     }
   }
 
-  // Check if user is logged in
   Future<bool> isLoggedIn() async {
     String? loggedIn = await _secureStorage.read(key: 'loggedIn');
-    return loggedIn == 'true'; // Check if the user is logged in
+    return loggedIn == 'true';
   }
 
-  // Get the current user's email
   Future<String?> getEmail() async {
     try {
-      return await _secureStorage.read(key: 'email'); // Read the stored email securely
+      return await _secureStorage.read(key: 'email');
     } catch (e) {
       print('Error retrieving email: ${e.toString()}');
       return null;
