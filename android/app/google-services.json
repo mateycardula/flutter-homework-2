@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "457130931960",
+    "project_id": "jokes-homework",
+    "storage_bucket": "jokes-homework.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457130931960:android:b9b1236de4b2bc60cbad0d",
+        "android_client_info": {
+          "package_name": "mk.ukim.finki.mateycardula.jokesapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmwpKVZHYsoTfIMP2IfYZEJ3mxnSmvefA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

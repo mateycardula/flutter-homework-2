@@ -2,7 +2,7 @@ class Joke {
   final String type;
   final String setup;
   final String punchline;
-  final int id;
+  final String id;
 
   Joke({
     required this.type,
@@ -17,7 +17,7 @@ class Joke {
       type: json['type'],
       setup: json['setup'],
       punchline: json['punchline'],
-      id: json['id'],
+      id: json['id'].toString(),
     );
   }
 }

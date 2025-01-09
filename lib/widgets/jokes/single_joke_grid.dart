@@ -14,7 +14,7 @@ class SingleJokeGrid extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center, // Vertically center the content
           children: [
-            JokeCard(joke: joke), // Add the joke card to the column
+            JokeCard(joke: joke, isFavorite: false, onFavoriteToggle: () {  },), // Add the joke card to the column
           ],
         ),
       ),
